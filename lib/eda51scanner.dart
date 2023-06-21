@@ -6,7 +6,6 @@ import 'package:eda51scanner/scanner_callback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'eda51scanner_platform_interface.dart';
 
 class Eda51scanner {
   // Future<String?> getPlatformVersion() {

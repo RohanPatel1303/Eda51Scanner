@@ -1,3 +1,5 @@
+import 'package:eda51scanner/scanned_data.dart';
+import 'package:eda51scanner/scanner_callback.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -15,10 +17,15 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> implements ScannerCallback {
   String _platformVersion = 'Unknown';
   final _eda51scannerPlugin = Eda51scanner();
 bool? supported;
+  ScannedData? scannedData;
+  String? errorMessage;
+
+
+  Map? get scannedDataMap => null;
   @override
   void initState() {
     super.initState();
@@ -61,9 +68,46 @@ Future<void> getsupport() async {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $supported'),
+          child: Column(
+            children: [
+              Text('Running on: $supported'),
+              ElevatedButton(onPressed: ()async{
+                Eda51scanner eda51scanner=await Eda51scanner(
+                  onScannerDecodeCallback: (scanneddata){
+                    print(scanneddata!.code!);
+                  }
+                );
+                eda51scanner.startScanner();
+                eda51scanner.startScanning();
+                eda51scanner.onDecoded(scannedDataMap);
+                print(scannedDataMap.toString());
+
+              }, child: Text("click me")),
+              ElevatedButton(onPressed: (){
+                Eda51scanner edascanner=Eda51scanner();
+                edascanner.stopScanner();
+              }
+                  , child: Text("stops"))
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void onDecoded(ScannedData? scannedData) {
+    print("called");
+    setState(() {
+      scannedData=scannedData;
+  print(scannedData!.code!);
+    });
+  }
+
+  @override
+  void onError(Exception error) {
+    setState(() {
+      errorMessage=error.toString();
+    });
   }
 }
