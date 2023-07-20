@@ -1,6 +1,6 @@
 name: eda51scanner
-description: A new Flutter project.
-version: 0.0.1
+description: Flutter Plugin To Read Barcode Using Eda51 Scanner Hardware.
+version: 0.0.3
 homepage:
 
 environment:
